@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  /* Corporate palette */
+  --color-brand-navy: #0B1B34;
+  --color-brand-navy-2: #10264A;
+  --color-brand-coral: #FF2F5A;
+  --color-brand-coral-hover: #E62850;
+
+  --color-bg: #FFFFFF;
+  --color-bg-soft: #F3F6FB;
+  --color-card: #FFFFFF;
+
+  --color-border: #D9E1EE;
+
+  --color-text: #111827;
+  --color-text-muted: #5B6472;
+  --color-text-on-dark: #FFFFFF;
+
+  --color-success: #1E8A45;
+  --color-warning: #D4860A;
+  --color-error: #C42B2B;
+  --color-info: #2563EB;
+
+  --radius-xl: 16px;
+  --radius-lg: 14px;
+  --radius-md: 12px;
+
+  --shadow-card: 0 12px 26px rgba(11, 27, 52, 0.10);
+  --shadow-soft: 0 8px 18px rgba(11, 27, 52, 0.08);
+
+  --maxw: 1120px;
+}
+
+html, body{
+  height: 100%;
+}
+
+body{
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+::selection{
+  background: rgba(255, 47, 90, 0.18);
+}
