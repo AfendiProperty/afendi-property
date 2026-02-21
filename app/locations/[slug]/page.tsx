@@ -41,6 +41,8 @@ export default function LocationDetailPage({ params }: { params: { slug: string 
   const l = getLocation(params.slug);
   if (!l) return notFound();
 
+  const showDubaiFaqs = l.slug === "dubai" && Array.isArray(l.faqs) && l.faqs.length > 0;
+
   return (
     <section className="py-12">
       <Container>
@@ -68,10 +70,51 @@ export default function LocationDetailPage({ params }: { params: { slug: string 
             </p>
             <div className="mt-5 grid gap-2">
               <Button href="/contact">Request Accommodation</Button>
-              <Button href="/for-suppliers" variant="secondary">Become a Supplier</Button>
+              <Button href="/for-suppliers" variant="secondary">
+                Become a Supplier
+              </Button>
             </div>
           </Card>
         </div>
+
+        {/* Dubai FAQs (visible + schema) */}
+        {showDubaiFaqs ? (
+          <div className="mt-10">
+            <div className="text-sm font-extrabold text-brand-navy">Dubai FAQs</div>
+            <p className="mt-2 max-w-[80ch] text-sm text-text-muted">
+              Common questions from corporate clients, relocation teams and project managers sourcing accommodation in
+              Dubai.
+            </p>
+
+            <div className="mt-4 grid gap-3">
+              {l.faqs!.map((f) => (
+                <Card key={f.q}>
+                  <div className="text-sm font-bold text-brand-navy">{f.q}</div>
+                  <p className="mt-2 text-sm text-text-muted">{f.a}</p>
+                </Card>
+              ))}
+            </div>
+
+            <script
+              type="application/ld+json"
+              // eslint-disable-next-line react/no-danger
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: l.faqs!.map((f) => ({
+                    "@type": "Question",
+                    name: f.q,
+                    acceptedAnswer: {
+                      "@type": "Answer",
+                      text: f.a,
+                    },
+                  })),
+                }),
+              }}
+            />
+          </div>
+        ) : null}
       </Container>
     </section>
   );
