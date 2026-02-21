@@ -48,22 +48,6 @@ export const services: Service[] = [
   },
 ];
 
-eexport async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const service = getService(params.slug);
-  if (!service) return { title: "Service | Afendi Property" };
-
-  return {
-    title: service.seoTitle,
-    description: service.seoDescription,
-    alternates: { canonical: `/services/${service.slug}` },
-    openGraph: {
-      title: service.seoTitle,
-      description: service.seoDescription,
-      url: `/services/${service.slug}`,
-    },
-    twitter: {
-      title: service.seoTitle,
-      description: service.seoDescription,
-    },
-  };
+export function getService(slug: string) {
+  return services.find((s) => s.slug === slug);
 }

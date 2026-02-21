@@ -11,10 +11,29 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const service = getService(params.slug);
-  if (!service) return { title: "Service" };
+  if (!service) return { title: "Service | Afendi Property" };
+
+  const baseTitle = service.title;
+  const title = `${baseTitle} | Global Accommodation & Relocation`;
+  const description =
+    service.summary ||
+    "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
+
   return {
-    title: service.title,
-    description: service.summary,
+    title,
+    description,
+    alternates: {
+      canonical: `/services/${service.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/services/${service.slug}`,
+    },
+    twitter: {
+      title,
+      description,
+    },
   };
 }
 
