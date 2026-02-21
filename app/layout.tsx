@@ -4,25 +4,30 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/lib/site";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.siteUrl),
+export const metadata = {
   title: {
-    default: `${siteConfig.name} | ${siteConfig.tagline}`,
-    template: `%s | ${siteConfig.name}`,
+    default: "Global Corporate Relocation & Serviced Accommodation | Afendi Property",
+    template: "%s | Afendi Property",
   },
   description:
-    "Global serviced accommodation, workforce housing and emergency stays — sourced and booked with confidence.",
-  openGraph: {
-    title: `${siteConfig.name} | ${siteConfig.tagline}`,
-    description:
-      "Business stays, delivered properly. Sourcing and booking serviced accommodation worldwide.",
-    url: siteConfig.siteUrl,
-    siteName: siteConfig.name,
-    type: "website",
+    "Afendi Property is a UAE-based global accommodation partner providing corporate relocation, workforce housing and emergency serviced accommodation solutions worldwide.",
+  metadataBase: new URL("https://afendiproperty.com"),
+  alternates: {
+    canonical: "https://afendiproperty.com",
   },
-  robots: {
-    index: true,
-    follow: true,
+  openGraph: {
+    type: "website",
+    url: "https://afendiproperty.com",
+    siteName: "Afendi Property",
+    title: "Global Corporate Relocation & Serviced Accommodation | Afendi Property",
+    description:
+      "UAE-based global accommodation partner for corporate relocation, workforce housing and emergency serviced accommodation worldwide.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Global Corporate Relocation & Serviced Accommodation | Afendi Property",
+    description:
+      "UAE-based global accommodation partner for corporate relocation, workforce housing and emergency serviced accommodation worldwide.",
   },
 };
 

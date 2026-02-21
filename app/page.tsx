@@ -13,14 +13,14 @@ export default function HomePage() {
         <Container className="grid items-center gap-8 md:grid-cols-[1.2fr_0.8fr]">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface-soft px-3 py-1 text-xs font-semibold text-text-muted">
-              UK-strong • Global sourcing • Expanding across the UAE
+              UAE based • Global serviced accommodation • Corporate relocation support
             </div>
             <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-brand-navy md:text-5xl">
               Business stays. Delivered properly.
             </h1>
             <p className="mt-4 max-w-[65ch] text-base text-text-muted">
-              Global serviced accommodation, workforce housing and emergency stays — sourced and booked with confidence.
-              Email-first coordination, with WhatsApp support when urgent.
+              UAE-based and globally connected. We source and book trusted serviced 
+              accommodation for relocating employees, workforces, and urgent placements worldwide.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/contact">Request Accommodation</Button>
@@ -75,7 +75,7 @@ export default function HomePage() {
               <div className="inline-grid h-8 w-8 place-items-center rounded-lg bg-brand-coral/10 text-brand-coral font-black">✓</div>
               <h3 className="mt-3 text-base font-bold text-brand-navy">Global supply, local certainty</h3>
               <p className="mt-2 text-sm text-text-muted">
-                We source vetted stays worldwide — with strong UK coverage and expanding Middle East supply.
+                We source vetted stays worldwide — with a growing network across the UAE and key international markets.
               </p>
             </Card>
             <Card>
