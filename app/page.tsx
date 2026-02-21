@@ -37,7 +37,7 @@ export default function HomePage() {
           {/* Hero image (apartment interior) */}
           <div className="relative h-[460px] w-full overflow-hidden rounded-2xl shadow-lg">
             <Image
-              src="/images/hero-apartment.jpg"
+              src="/images/hero-apartment.png"
               alt="Modern serviced apartment interior for corporate relocation"
               fill
               priority
@@ -97,7 +97,7 @@ export default function HomePage() {
         <Container className="grid items-center gap-10 md:grid-cols-2">
           <div className="relative h-[420px] w-full overflow-hidden rounded-2xl shadow-lg">
             <Image
-              src="/images/dubai-skyline.jpg"
+              src="/images/dubai-skyline.png"
               alt="Dubai skyline business district"
               fill
               className="object-cover"
