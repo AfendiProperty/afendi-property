@@ -3,14 +3,14 @@ import { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
-import { getLocation, locations } from "@/lib/data/locations";
+import { getLocation, locations, type Location } from "@/lib/data/locations";
 
 export async function generateStaticParams() {
   return locations.map((l) => ({ slug: l.slug }));
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const l = getLocation(params.slug);
+  const l = getLocation(params.slug) as Location | undefined;
   if (!l) return { title: "Location | Afendi Property" };
 
   const title = l.seoTitle || `${l.title} | Afendi Property`;
@@ -70,8 +70,8 @@ export default function LocationDetailPage({ params }: { params: { slug: string 
             </p>
             <div className="mt-5 grid gap-2">
               <Button href="/contact">Request Accommodation</Button>
-              <Button href="/for-suppliers" variant="secondary">
-                Become a Supplier
+              <Button href="/corporate-relocation" variant="secondary">
+                Corporate Relocation
               </Button>
             </div>
           </Card>
