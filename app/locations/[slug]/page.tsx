@@ -11,8 +11,30 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const l = getLocation(params.slug);
-  if (!l) return { title: "Location" };
-  return { title: l.title, description: l.summary };
+  if (!l) return { title: "Location | Afendi Property" };
+
+  const title = l.seoTitle || `${l.title} | Afendi Property`;
+  const description =
+    l.seoDescription ||
+    l.summary ||
+    "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/locations/${l.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/locations/${l.slug}`,
+    },
+    twitter: {
+      title,
+      description,
+    },
+  };
 }
 
 export default function LocationDetailPage({ params }: { params: { slug: string } }) {

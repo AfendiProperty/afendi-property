@@ -7,8 +7,9 @@ import { Button } from "@/components/Button";
 import { locations } from "@/lib/data/locations";
 
 export const metadata: Metadata = {
-  title: "Locations",
-  description: "Where we source accommodation — UK-strong, expanding across the UAE, and global coverage.",
+  title: "Locations | Dubai, UAE, UK & Global Coverage",
+  description:
+    "Explore where Afendi Property sources corporate relocation and serviced accommodation — Dubai, UAE, the UK and worldwide coverage through our trusted network.",
 };
 
 export default function LocationsPage() {
@@ -17,7 +18,7 @@ export default function LocationsPage() {
       <Container>
         <SectionHeading
           title="Locations"
-          subtitle="UK-strong coverage with expansion across the UAE — plus worldwide sourcing where needed."
+          subtitle="Coverage across Dubai, the UAE and the UK — plus worldwide sourcing through our trusted partner network."
           right={<Button href="/contact">Request Accommodation</Button>}
         />
         <div className="mt-6 grid gap-4 md:grid-cols-3">
