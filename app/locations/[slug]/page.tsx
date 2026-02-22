@@ -77,24 +77,28 @@ export async function generateMetadata({
   };
 }
 
-export default function LocationDetailPage({ params }: { params: { slug: string } }) {
-  const l = getLocation(params.slug);
-  if (!l) {
-  return (
-    <section className="py-12">
-      <Container>
-        <h1 className="text-2xl font-extrabold text-brand-navy">Location not found</h1>
-        <p className="mt-2 text-text-muted">
-          Requested slug: <span className="font-mono">{params.slug}</span>
-        </p>
-        <p className="mt-2 text-text-muted">
-          Available slugs:{" "}
-          <span className="font-mono">{locations.map((x) => x.slug).join(", ")}</span>
-        </p>
-      </Container>
-    </section>
-  );
-}
+export default function LocationDetailPage(props: { params: { slug?: string } }) {
+  const slug = props?.params?.slug;
+
+  if (!slug) {
+    return (
+      <section className="py-12">
+        <Container>
+          <h1 className="text-2xl font-extrabold text-brand-navy">Location not found</h1>
+          <p className="mt-2 text-text-muted">
+            Requested slug: <span className="font-mono">(missing)</span>
+          </p>
+          <p className="mt-2 text-text-muted">
+            Available slugs:{" "}
+            <span className="font-mono">{locations.map((x) => x.slug).join(", ")}</span>
+          </p>
+        </Container>
+      </section>
+    );
+  }
+
+  const l = getLocation(slug);
+  if (!l) return notFound();
 
   const faqs = Array.isArray(l.faqs) ? l.faqs : [];
   const showFaqs = faqs.length > 0;
