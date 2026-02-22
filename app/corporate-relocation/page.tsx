@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Script from "next/script";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
@@ -53,9 +54,7 @@ export const metadata: Metadata = {
   title: "Corporate Relocation & Employee Accommodation Solutions",
   description:
     "UAE-based global accommodation partner providing corporate relocation support and serviced accommodation sourcing for relocating employees, project teams and urgent placements worldwide.",
-  alternates: {
-    canonical: `${SITE_URL}/corporate-relocation`,
-  },
+  alternates: { canonical: `${SITE_URL}/corporate-relocation` },
   openGraph: {
     title: "Corporate Relocation & Employee Accommodation Solutions",
     description:
@@ -82,14 +81,15 @@ export const metadata: Metadata = {
 export default function CorporateRelocationPage() {
   return (
     <section className="py-12">
-      <Container>
-        {/* FAQ Schema */}
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
-        />
+      {/* FAQ Schema (best placed in head via Next Script) */}
+      <Script
+        id="corporate-relocation-faq-schema"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
+      />
 
+      <Container>
         <div className="text-sm font-semibold text-text-muted">Solutions</div>
 
         <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-5xl">
@@ -199,7 +199,49 @@ export default function CorporateRelocationPage() {
             </Button>
           </div>
 
-          <div className="mt-6 text-sm text-text-muted">
+          {/* Related internal links (topic cluster) */}
+          <div className="mt-10">
+            <div className="text-sm font-extrabold text-brand-navy">Related</div>
+            <div className="mt-3 grid gap-4 md:grid-cols-3">
+              <Card>
+                <div className="text-sm font-extrabold text-brand-navy">Global Mobility</div>
+                <p className="mt-2 text-sm text-text-muted">
+                  A dedicated overview for HR and mobility teams managing employee relocation and temporary housing.
+                </p>
+                <div className="mt-4">
+                  <Link className="text-sm font-semibold text-brand-navy underline" href="/global-mobility-accommodation">
+                    View Global Mobility page
+                  </Link>
+                </div>
+              </Card>
+
+              <Card>
+                <div className="text-sm font-extrabold text-brand-navy">Serviced Accommodation</div>
+                <p className="mt-2 text-sm text-text-muted">
+                  Flexible furnished stays for business travel, relocation programmes and project work.
+                </p>
+                <div className="mt-4">
+                  <Link className="text-sm font-semibold text-brand-navy underline" href="/services/serviced-accommodation">
+                    Explore Serviced Accommodation
+                  </Link>
+                </div>
+              </Card>
+
+              <Card>
+                <div className="text-sm font-extrabold text-brand-navy">Dubai coverage</div>
+                <p className="mt-2 text-sm text-text-muted">
+                  UAE-based delivery with strong Dubai supply for corporate relocation and urgent placements.
+                </p>
+                <div className="mt-4">
+                  <Link className="text-sm font-semibold text-brand-navy underline" href="/locations/dubai">
+                    Dubai location page
+                  </Link>
+                </div>
+              </Card>
+            </div>
+          </div>
+
+          <div className="mt-8 text-sm text-text-muted">
             Prefer email?{" "}
             <Link href="/contact" className="font-semibold text-brand-navy underline">
               Send your brief
