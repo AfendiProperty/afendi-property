@@ -1,44 +1,95 @@
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { getService, services } from "@/lib/data/services";
 
+const SITE_URL = "https://afendiproperty.com";
+
 export async function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const service = getService(params.slug);
-  if (!service) return { title: "Service | Afendi Property" };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+
+  const service = getService(slug);
+  if (!service) {
+    return {
+      title: "Services | Afendi Property",
+      description:
+        "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
+      alternates: { canonical: `${SITE_URL}/services` },
+      openGraph: {
+        title: "Services | Afendi Property",
+        description:
+          "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
+        url: `${SITE_URL}/services`,
+        images: [
+          {
+            url: `${SITE_URL}/og.png`,
+            width: 1200,
+            height: 630,
+            alt: "Afendi Property — Global Corporate Relocation & Serviced Accommodation",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        images: [`${SITE_URL}/og.png`],
+      },
+    };
+  }
 
   const baseTitle = service.title;
-  const title = `${baseTitle} | Global Accommodation & Relocation`;
+  const title = `${baseTitle} | Afendi Property`;
   const description =
     service.summary ||
     "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
+
+  const url = `${SITE_URL}/services/${service.slug}`;
 
   return {
     title,
     description,
     alternates: {
-      canonical: `/services/${service.slug}`,
+      canonical: url,
     },
     openGraph: {
       title,
       description,
-      url: `/services/${service.slug}`,
+      url,
+      images: [
+        {
+          url: `${SITE_URL}/og.png`,
+          width: 1200,
+          height: 630,
+          alt: "Afendi Property — Global Corporate Relocation & Serviced Accommodation",
+        },
+      ],
     },
     twitter: {
+      card: "summary_large_image",
       title,
       description,
+      images: [`${SITE_URL}/og.png`],
     },
   };
 }
 
-export default function ServiceDetailPage({ params }: { params: { slug: string } }) {
-  const service = getService(params.slug);
+export default async function ServiceDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const service = getService(slug);
   if (!service) return notFound();
 
   return (
@@ -78,7 +129,9 @@ export default function ServiceDetailPage({ params }: { params: { slug: string }
             </p>
             <div className="mt-5 grid gap-2">
               <Button href="/contact">Request Accommodation</Button>
-              <Button href="/for-suppliers" variant="secondary">Become a Supplier</Button>
+              <Button href="/for-suppliers" variant="secondary">
+                Become a Supplier
+              </Button>
             </div>
           </Card>
         </div>
