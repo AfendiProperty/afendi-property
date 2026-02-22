@@ -1,14 +1,47 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
-import { Button } from "@/components/Button";
-import { getService, services } from "@/lib/data/services";
+import { getPost, posts } from "@/lib/data/blog";
 
 const SITE_URL = "https://afendiproperty.com";
 
+function blogPostingSchema(post: { title: string; excerpt: string; slug: string; date: string }) {
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const published = new Date(post.date).toISOString();
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    headline: post.title,
+    description: post.excerpt,
+    image: [`${SITE_URL}/og.png`],
+    datePublished: published,
+    dateModified: published,
+    author: {
+      "@type": "Organization",
+      name: "Afendi Property",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Afendi Property",
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+  });
+}
+
 export async function generateStaticParams() {
-  return services.map((s) => ({ slug: s.slug }));
+  return posts.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -18,18 +51,18 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
 
-  const service = getService(slug);
-  if (!service) {
+  const post = getPost(slug);
+  if (!post) {
     return {
-      title: "Services | Afendi Property",
+      title: "Blog | Afendi Property",
       description:
-        "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
-      alternates: { canonical: `${SITE_URL}/services` },
+        "Insights on corporate relocation, serviced accommodation, workforce housing and emergency placements worldwide.",
+      alternates: { canonical: `${SITE_URL}/blog` },
       openGraph: {
-        title: "Services | Afendi Property",
+        title: "Blog | Afendi Property",
         description:
-          "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
-        url: `${SITE_URL}/services`,
+          "Insights on corporate relocation, serviced accommodation, workforce housing and emergency placements worldwide.",
+        url: `${SITE_URL}/blog`,
         images: [
           {
             url: `${SITE_URL}/og.png`,
@@ -46,24 +79,22 @@ export async function generateMetadata({
     };
   }
 
-  const baseTitle = service.title;
-  const title = `${baseTitle} | Afendi Property`;
-  const description =
-    service.summary ||
-    "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
-
-  const url = `${SITE_URL}/services/${service.slug}`;
+  const title = `${post.title} | Afendi Property`;
+  const description = post.excerpt;
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const publishedTime = new Date(post.date).toISOString();
 
   return {
     title,
     description,
-    alternates: {
-      canonical: url,
-    },
+    alternates: { canonical: url },
     openGraph: {
       title,
       description,
       url,
+      type: "article",
+      publishedTime,
+      modifiedTime: publishedTime,
       images: [
         {
           url: `${SITE_URL}/og.png`,
@@ -82,58 +113,43 @@ export async function generateMetadata({
   };
 }
 
-export default async function ServiceDetailPage({
+export default async function BlogPostPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
 
-  const service = getService(slug);
-  if (!service) return notFound();
+  const post = getPost(slug);
+  if (!post) return notFound();
 
   return (
     <section className="py-12">
+      {/* BlogPosting Schema */}
+      <Script
+        id={`blogposting-schema-${post.slug}`}
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: blogPostingSchema(post) }}
+      />
+
       <Container>
-        <div className="text-sm font-semibold text-text-muted">Services</div>
-        <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl">{service.title}</h1>
-        <p className="mt-4 max-w-[70ch] text-text-muted">{service.detail}</p>
+        <div className="text-xs font-semibold text-text-muted">
+          {new Date(post.date).toLocaleDateString()}
+        </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-[1fr_0.9fr]">
-          <Card>
-            <div className="text-sm font-bold text-brand-navy">What you get</div>
-            <ul className="mt-3 grid gap-2 text-sm text-text-muted">
-              {service.bullets.map((b) => (
-                <li key={b} className="flex items-start gap-2">
-                  <span className="mt-1 inline-block h-2 w-2 rounded-full bg-brand-coral" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
+        <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl">
+          {post.title}
+        </h1>
 
-            <div className="mt-6 text-sm font-bold text-brand-navy">Ideal for</div>
-            <ul className="mt-3 grid gap-2 text-sm text-text-muted">
-              {service.idealFor.map((b) => (
-                <li key={b} className="flex items-start gap-2">
-                  <span className="mt-1 inline-block h-2 w-2 rounded-full bg-brand-navy" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
+        <p className="mt-3 max-w-[75ch] text-sm text-text-muted">{post.excerpt}</p>
 
-          <Card className="bg-surface-soft">
-            <div className="text-sm font-extrabold text-brand-navy">Ready to get options?</div>
-            <p className="mt-2 text-sm text-text-muted">
-              Tell us dates, location, budget and must-haves. We’ll respond via email with next steps.
-            </p>
-            <div className="mt-5 grid gap-2">
-              <Button href="/contact">Request Accommodation</Button>
-              <Button href="/for-suppliers" variant="secondary">
-                Become a Supplier
-              </Button>
-            </div>
-          </Card>
+        <div className="mt-8 grid gap-4">
+          {post.content.map((para, idx) => (
+            <Card key={idx}>
+              <p className="text-sm text-text-muted leading-6">{para}</p>
+            </Card>
+          ))}
         </div>
       </Container>
     </section>
