@@ -1,10 +1,44 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { getPost, posts } from "@/lib/data/blog";
 
 const SITE_URL = "https://afendiproperty.com";
+
+function blogPostingSchema(post: { title: string; excerpt: string; slug: string; date: string }) {
+  const url = `${SITE_URL}/blog/${post.slug}`;
+  const published = new Date(post.date).toISOString();
+
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    headline: post.title,
+    description: post.excerpt,
+    image: [`${SITE_URL}/og.png`],
+    datePublished: published,
+    dateModified: published,
+    author: {
+      "@type": "Organization",
+      name: "Afendi Property",
+      url: SITE_URL,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Afendi Property",
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/logo.png`,
+      },
+    },
+  });
+}
 
 export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -48,6 +82,7 @@ export async function generateMetadata({
   const title = `${post.title} | Afendi Property`;
   const description = post.excerpt;
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const publishedTime = new Date(post.date).toISOString();
 
   return {
     title,
@@ -58,6 +93,8 @@ export async function generateMetadata({
       description,
       url,
       type: "article",
+      publishedTime,
+      modifiedTime: publishedTime,
       images: [
         {
           url: `${SITE_URL}/og.png`,
@@ -88,6 +125,14 @@ export default async function BlogPostPage({
 
   return (
     <section className="py-12">
+      {/* BlogPosting Schema */}
+      <Script
+        id={`blogposting-schema-${post.slug}`}
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: blogPostingSchema(post) }}
+      />
+
       <Container>
         <div className="text-xs font-semibold text-text-muted">
           {new Date(post.date).toLocaleDateString()}
