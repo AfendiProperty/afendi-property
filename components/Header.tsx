@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/Container";
-import { Button } from "@/components/Button";
+import { Button } from "./Button";
 import { siteConfig } from "@/lib/site";
 import { MobileNav } from "@/components/MobileNav";
 
@@ -36,20 +36,21 @@ export function Header() {
         </Link>
 
         <nav className="hidden md:flex flex-1 justify-center items-center space-x-5 text-sm font-semibold text-brand-navy">
-  {nav.map((i) => (
-    <Link
-      key={i.href}
-      href={i.href}
-      className="hover:opacity-80 whitespace-nowrap"
-    >
-      {i.label}
-    </Link>
-  ))}
-</nav>
+          {nav.map((i) => (
+            <Link key={i.href} href={i.href} className="hover:opacity-80 whitespace-nowrap">
+              {i.label}
+            </Link>
+          ))}
+        </nav>
 
-        <div className="hidden md:flex items-center gap-2">
-          <Button href="/for-suppliers" variant="secondary" size="small">Become a Supplier</Button>
-          <Button href="/contact" size="small">Request Accommodation</Button>
+        {/* Smaller header buttons + extra spacing from nav */}
+        <div className="hidden md:flex items-center gap-2 pl-6">
+          <Button href="/for-suppliers" variant="secondary" className="px-3 py-1.5 text-xs">
+            Become a Supplier
+          </Button>
+          <Button href="/contact" className="px-3 py-1.5 text-xs">
+            Request Accommodation
+          </Button>
         </div>
 
         <div className="md:hidden">
