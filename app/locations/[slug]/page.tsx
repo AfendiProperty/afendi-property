@@ -14,10 +14,7 @@ function faqSchema(faqs: { q: string; a: string }[]) {
     mainEntity: faqs.map((f) => ({
       "@type": "Question",
       name: f.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: f.a,
-      },
+      acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   });
 }
@@ -29,15 +26,35 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const l = getLocation(params.slug) as Location | undefined;
+  const { slug } = await params;
+
+  const l = getLocation(slug) as Location | undefined;
   if (!l) {
     return {
       title: "Locations | Afendi Property",
       description:
         "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
       alternates: { canonical: `${SITE_URL}/locations` },
+      openGraph: {
+        title: "Locations | Afendi Property",
+        description:
+          "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
+        url: `${SITE_URL}/locations`,
+        images: [
+          {
+            url: `${SITE_URL}/og.png`,
+            width: 1200,
+            height: 630,
+            alt: "Afendi Property — Global Corporate Relocation & Serviced Accommodation",
+          },
+        ],
+      },
+      twitter: {
+        card: "summary_large_image",
+        images: [`${SITE_URL}/og.png`],
+      },
     };
   }
 
@@ -47,15 +64,12 @@ export async function generateMetadata({
     l.summary ||
     "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
 
-  const urlPath = `/locations/${l.slug}`;
-  const url = `${SITE_URL}${urlPath}`;
+  const url = `${SITE_URL}/locations/${l.slug}`;
 
   return {
     title,
     description,
-    alternates: {
-      canonical: url,
-    },
+    alternates: { canonical: url },
     openGraph: {
       title,
       description,
@@ -70,6 +84,7 @@ export async function generateMetadata({
       ],
     },
     twitter: {
+      card: "summary_large_image",
       title,
       description,
       images: [`${SITE_URL}/og.png`],
@@ -77,25 +92,12 @@ export async function generateMetadata({
   };
 }
 
-export default function LocationDetailPage(props: { params: { slug?: string } }) {
-  const slug = props?.params?.slug;
-
-  if (!slug) {
-    return (
-      <section className="py-12">
-        <Container>
-          <h1 className="text-2xl font-extrabold text-brand-navy">Location not found</h1>
-          <p className="mt-2 text-text-muted">
-            Requested slug: <span className="font-mono">(missing)</span>
-          </p>
-          <p className="mt-2 text-text-muted">
-            Available slugs:{" "}
-            <span className="font-mono">{locations.map((x) => x.slug).join(", ")}</span>
-          </p>
-        </Container>
-      </section>
-    );
-  }
+export default async function LocationDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
 
   const l = getLocation(slug);
   if (!l) return notFound();
