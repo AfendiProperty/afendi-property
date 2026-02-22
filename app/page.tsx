@@ -22,6 +22,13 @@ export default function HomePage() {
               UAE-based and globally connected. We source and book trusted serviced accommodation for relocating
               employees, workforces, and urgent placements worldwide.
             </p>
+
+            {/* Step 2: procurement / enterprise signal */}
+            <p className="mt-2 max-w-[65ch] text-sm text-text-muted">
+              Structured sourcing, clear confirmations, policy-aligned placements and consistent standards across
+              regions.
+            </p>
+
             <div className="mt-6 flex flex-wrap gap-3">
               <Button href="/contact">Request Accommodation</Button>
               <Button href="/corporate-relocation" variant="secondary">
@@ -50,6 +57,42 @@ export default function HomePage() {
                 Fully furnished • Wi-Fi • Weekly cleaning • Linen & towels
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Step 1: Who we work with / corporate positioning */}
+      <section className="py-16 bg-white">
+        <Container>
+          <SectionHeading
+            title="Built for Corporate & Project Teams"
+            subtitle="Supporting HR, global mobility, construction and insurance teams with structured accommodation sourcing."
+          />
+
+          <div className="mt-8 grid gap-6 md:grid-cols-4">
+            {[
+              {
+                title: "Construction & Engineering",
+                desc: "Workforce housing near project sites with scalable, multi-unit sourcing.",
+              },
+              {
+                title: "Insurance & Claims",
+                desc: "Emergency and displacement accommodation with structured updates and clear documentation.",
+              },
+              {
+                title: "Global Mobility & HR",
+                desc: "Relocation accommodation aligned with company policy and employee expectations.",
+              },
+              {
+                title: "Corporate Travel & Projects",
+                desc: "Short-term serviced accommodation for executives, consultants and project teams.",
+              },
+            ].map((item) => (
+              <Card key={item.title}>
+                <h3 className="text-base font-bold text-brand-navy">{item.title}</h3>
+                <p className="mt-2 text-sm text-text-muted">{item.desc}</p>
+              </Card>
+            ))}
           </div>
         </Container>
       </section>
@@ -155,9 +198,18 @@ export default function HomePage() {
           <div className="mt-3 h-1 w-14 rounded-full bg-brand-coral" />
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {[
-              ["Afendi placed our team near site within 24 hours. Smooth from first call to check-in.", "Ops Manager, Construction"],
-              ["During a claim disruption, they sourced emergency accommodation quickly and kept us updated.", "Claims Lead, Insurance"],
-              ["Consistent quality across cities — exactly what we needed for project-based travel.", "Project Director"],
+              [
+                "Afendi placed our team near site within 24 hours. Smooth from first call to check-in.",
+                "Ops Manager, Construction",
+              ],
+              [
+                "During a claim disruption, they sourced emergency accommodation quickly and kept us updated.",
+                "Claims Lead, Insurance",
+              ],
+              [
+                "Consistent quality across cities — exactly what we needed for project-based travel.",
+                "Project Director",
+              ],
             ].map(([quote, by]) => (
               <div key={by} className="rounded-xl border border-white/15 bg-white/5 p-5">
                 <p className="text-sm text-white/95">{quote}</p>
@@ -181,7 +233,10 @@ export default function HomePage() {
 
       <section className="py-12">
         <Container>
-          <SectionHeading title="Minimum property standards" subtitle="Every stay we source or list must meet these baseline requirements." />
+          <SectionHeading
+            title="Minimum property standards"
+            subtitle="Every stay we source or list must meet these baseline requirements."
+          />
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {siteConfig.minimumStandards.map((s) => (
               <Card key={s}>
