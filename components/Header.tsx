@@ -48,8 +48,8 @@ export function Header() {
 </nav>
 
         <div className="hidden md:flex items-center gap-2">
-          <Button href="/for-suppliers" variant="secondary">Become a Supplier</Button>
-          <Button href="/contact">Request Accommodation</Button>
+          <Button href="/for-suppliers" variant="secondary" size="small">Become a Supplier</Button>
+          <Button href="/contact" size="small">Request Accommodation</Button>
         </div>
 
         <div className="md:hidden">
