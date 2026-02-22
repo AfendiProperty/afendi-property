@@ -7,6 +7,7 @@ import { MobileNav } from "@/components/MobileNav";
 
 const nav = [
   { href: "/corporate-relocation", label: "Corporate Relocation" },
+  { href: "/global-mobility-accommodation", label: "Global Mobility" },
   { href: "/services", label: "Services" },
   { href: "/for-businesses", label: "For Businesses" },
   { href: "/for-suppliers", label: "For Suppliers" },
