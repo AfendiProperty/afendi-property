@@ -1,17 +1,45 @@
 import { notFound } from "next/navigation";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { getLocation, locations, type Location } from "@/lib/data/locations";
 
+const SITE_URL = "https://afendiproperty.com";
+
+function faqSchema(faqs: { q: string; a: string }[]) {
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  });
+}
+
 export async function generateStaticParams() {
   return locations.map((l) => ({ slug: l.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const l = getLocation(params.slug) as Location | undefined;
-  if (!l) return { title: "Location | Afendi Property" };
+  if (!l) {
+    return {
+      title: "Locations | Afendi Property",
+      description:
+        "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.",
+      alternates: { canonical: `${SITE_URL}/locations` },
+    };
+  }
 
   const title = l.seoTitle || `${l.title} | Afendi Property`;
   const description =
@@ -19,20 +47,32 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     l.summary ||
     "UAE-based global accommodation partner providing corporate relocation support, serviced accommodation sourcing, workforce housing and emergency stays worldwide.";
 
+  const urlPath = `/locations/${l.slug}`;
+  const url = `${SITE_URL}${urlPath}`;
+
   return {
     title,
     description,
     alternates: {
-      canonical: `/locations/${l.slug}`,
+      canonical: url,
     },
     openGraph: {
       title,
       description,
-      url: `/locations/${l.slug}`,
+      url,
+      images: [
+        {
+          url: `${SITE_URL}/og.png`,
+          width: 1200,
+          height: 630,
+          alt: "Afendi Property — Global Corporate Relocation & Serviced Accommodation",
+        },
+      ],
     },
     twitter: {
       title,
       description,
+      images: [`${SITE_URL}/og.png`],
     },
   };
 }
@@ -41,11 +81,21 @@ export default function LocationDetailPage({ params }: { params: { slug: string 
   const l = getLocation(params.slug);
   if (!l) return notFound();
 
-  const showDubaiFaqs = l.slug === "dubai" && Array.isArray(l.faqs) && l.faqs.length > 0;
+  const faqs = Array.isArray(l.faqs) ? l.faqs : [];
+  const showFaqs = faqs.length > 0;
 
   return (
     <section className="py-12">
       <Container>
+        {/* FAQ Schema (only if FAQs exist) */}
+        {showFaqs && (
+          <script
+            type="application/ld+json"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
+          />
+        )}
+
         <div className="text-sm font-semibold text-text-muted">Locations</div>
         <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl">{l.title}</h1>
         <p className="mt-4 max-w-[70ch] text-text-muted">{l.summary}</p>
@@ -77,44 +127,25 @@ export default function LocationDetailPage({ params }: { params: { slug: string 
           </Card>
         </div>
 
-        {/* Dubai FAQs (visible + schema) */}
-        {showDubaiFaqs ? (
+        {/* Visible FAQs (for any location that has them) */}
+        {showFaqs && (
           <div className="mt-10">
-            <div className="text-sm font-extrabold text-brand-navy">Dubai FAQs</div>
+            <div className="text-sm font-extrabold text-brand-navy">{l.title} FAQs</div>
             <p className="mt-2 max-w-[80ch] text-sm text-text-muted">
-              Common questions from corporate clients, relocation teams and project managers sourcing accommodation in
-              Dubai.
+              Common questions from corporate clients, relocation teams and project managers sourcing accommodation in{" "}
+              {l.title}.
             </p>
 
             <div className="mt-4 grid gap-3">
-              {l.faqs!.map((f) => (
+              {faqs.map((f) => (
                 <Card key={f.q}>
                   <div className="text-sm font-bold text-brand-navy">{f.q}</div>
                   <p className="mt-2 text-sm text-text-muted">{f.a}</p>
                 </Card>
               ))}
             </div>
-
-            <script
-              type="application/ld+json"
-              // eslint-disable-next-line react/no-danger
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "FAQPage",
-                  mainEntity: l.faqs!.map((f) => ({
-                    "@type": "Question",
-                    name: f.q,
-                    acceptedAnswer: {
-                      "@type": "Answer",
-                      text: f.a,
-                    },
-                  })),
-                }),
-              }}
-            />
           </div>
-        ) : null}
+        )}
       </Container>
     </section>
   );
