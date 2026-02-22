@@ -5,23 +5,77 @@ import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
 import { SectionHeading } from "@/components/SectionHeading";
 
+const SITE_URL = "https://afendiproperty.com";
+
+const faqs = [
+  {
+    q: "How fast can you place relocating employees?",
+    a: "Most briefs can be turned around with options within 24–48 hours, depending on location, dates and budget.",
+  },
+  {
+    q: "Do you support UAE and UK relocations?",
+    a: "Yes. We operate with a UAE focus and strong UK coverage, plus global sourcing through our network.",
+  },
+  {
+    q: "What information do you need to start?",
+    a: "Dates, location preference, number of guests, budget range, length of stay, and must-haves. For corporate relocations, share policy requirements too.",
+  },
+  {
+    q: "Do you handle extensions or changes?",
+    a: "Yes. We support extensions, schedule changes and urgent replacements, keeping updates clear and coordinated.",
+  },
+  {
+    q: "What standards do you require for properties?",
+    a: "We prioritise fully furnished stays with Wi-Fi, linen & towels, cleaning support, cooking essentials and dependable management.",
+  },
+  {
+    q: "How do booking and payment work?",
+    a: "We coordinate options and booking steps by email. Payment/invoicing depends on supplier terms — we confirm all costs and policies before you proceed.",
+  },
+];
+
+function faqSchema(items: { q: string; a: string }[]) {
+  return JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: f.a,
+      },
+    })),
+  });
+}
+
 export const metadata: Metadata = {
   title: "Corporate Relocation & Employee Accommodation Solutions",
   description:
     "UAE-based global accommodation partner providing corporate relocation support and serviced accommodation sourcing for relocating employees, project teams and urgent placements worldwide.",
   alternates: {
-    canonical: "/corporate-relocation",
+    canonical: `${SITE_URL}/corporate-relocation`,
   },
   openGraph: {
     title: "Corporate Relocation & Employee Accommodation Solutions",
     description:
       "Corporate relocation support and serviced accommodation sourcing for relocating employees, project teams and urgent placements — UAE, UK and worldwide coverage.",
-    url: "/corporate-relocation",
+    url: `${SITE_URL}/corporate-relocation`,
+    images: [
+      {
+        url: `${SITE_URL}/og.png`,
+        width: 1200,
+        height: 630,
+        alt: "Afendi Property — Corporate Relocation & Serviced Accommodation",
+      },
+    ],
   },
   twitter: {
+    card: "summary_large_image",
     title: "Corporate Relocation & Employee Accommodation Solutions",
     description:
       "Corporate relocation support and serviced accommodation sourcing — UAE, UK and worldwide coverage.",
+    images: [`${SITE_URL}/og.png`],
   },
 };
 
@@ -29,6 +83,13 @@ export default function CorporateRelocationPage() {
   return (
     <section className="py-12">
       <Container>
+        {/* FAQ Schema */}
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
+        />
+
         <div className="text-sm font-semibold text-text-muted">Solutions</div>
 
         <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-5xl">
@@ -78,8 +139,8 @@ export default function CorporateRelocationPage() {
             />
             <ol className="mt-5 grid gap-3 text-sm text-text-muted">
               <li>
-                <span className="font-semibold text-brand-navy">1) Share the brief</span> — dates, location, budget, headcount,
-                must-haves and policy requirements.
+                <span className="font-semibold text-brand-navy">1) Share the brief</span> — dates, location, budget,
+                headcount, must-haves and policy requirements.
               </li>
               <li>
                 <span className="font-semibold text-brand-navy">2) Receive options</span> — curated serviced accommodation
@@ -120,38 +181,10 @@ export default function CorporateRelocationPage() {
         </div>
 
         <div className="mt-12">
-          <SectionHeading
-            title="Frequently asked questions"
-            subtitle="Quick answers for HR teams and mobility leads."
-          />
+          <SectionHeading title="Frequently asked questions" subtitle="Quick answers for HR teams and mobility leads." />
 
           <div className="mt-5 grid gap-3 md:grid-cols-2">
-            {[
-              {
-                q: "How fast can you place relocating employees?",
-                a: "Most briefs can be turned around with options within 24–48 hours, depending on location, dates and budget.",
-              },
-              {
-                q: "Do you support UAE and UK relocations?",
-                a: "Yes. We operate with a UAE focus and strong UK coverage, plus global sourcing through our network.",
-              },
-              {
-                q: "What information do you need to start?",
-                a: "Dates, location preference, number of guests, budget range, length of stay, and must-haves. For corporate relocations, share policy requirements too.",
-              },
-              {
-                q: "Do you handle extensions or changes?",
-                a: "Yes. We support extensions, schedule changes and urgent replacements, keeping updates clear and coordinated.",
-              },
-              {
-                q: "What standards do you require for properties?",
-                a: "We prioritise fully furnished stays with Wi-Fi, linen & towels, cleaning support, cooking essentials and dependable management.",
-              },
-              {
-                q: "How do booking and payment work?",
-                a: "We coordinate options and booking steps by email. Payment/invoicing depends on supplier terms — we confirm all costs and policies before you proceed.",
-              },
-            ].map((f) => (
+            {faqs.map((f) => (
               <Card key={f.q}>
                 <div className="text-sm font-bold text-brand-navy">{f.q}</div>
                 <p className="mt-2 text-sm text-text-muted">{f.a}</p>
