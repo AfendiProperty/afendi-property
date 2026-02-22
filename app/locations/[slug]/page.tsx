@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Container } from "@/components/Container";
 import { Card } from "@/components/Card";
 import { Button } from "@/components/Button";
@@ -107,18 +108,21 @@ export default async function LocationDetailPage({
 
   return (
     <section className="py-12">
-      <Container>
-        {/* FAQ Schema (only if FAQs exist) */}
-        {showFaqs && (
-          <script
-            type="application/ld+json"
-            // eslint-disable-next-line react/no-danger
-            dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
-          />
-        )}
+      {/* FAQ Schema (only if FAQs exist) */}
+      {showFaqs && (
+        <Script
+          id={`location-faq-schema-${l.slug}`}
+          type="application/ld+json"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{ __html: faqSchema(faqs) }}
+        />
+      )}
 
+      <Container>
         <div className="text-sm font-semibold text-text-muted">Locations</div>
-        <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl">{l.title}</h1>
+        <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-brand-navy md:text-4xl">
+          {l.title}
+        </h1>
         <p className="mt-4 max-w-[70ch] text-text-muted">{l.summary}</p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-[1fr_0.9fr]">
@@ -135,7 +139,9 @@ export default async function LocationDetailPage({
           </Card>
 
           <Card className="bg-surface-soft">
-            <div className="text-sm font-extrabold text-brand-navy">Need accommodation in {l.title}?</div>
+            <div className="text-sm font-extrabold text-brand-navy">
+              Need accommodation in {l.title}?
+            </div>
             <p className="mt-2 text-sm text-text-muted">
               Send your brief and we’ll respond by email with options and next steps.
             </p>
@@ -148,7 +154,7 @@ export default async function LocationDetailPage({
           </Card>
         </div>
 
-        {/* Visible FAQs (for any location that has them) */}
+        {/* Visible FAQs */}
         {showFaqs && (
           <div className="mt-10">
             <div className="text-sm font-extrabold text-brand-navy">{l.title} FAQs</div>

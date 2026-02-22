@@ -10,7 +10,6 @@ const nav = [
   { href: "/global-mobility-accommodation", label: "Global Mobility" },
   { href: "/services", label: "Services" },
   { href: "/for-businesses", label: "For Businesses" },
-  { href: "/for-suppliers", label: "For Suppliers" },
   { href: "/faqs", label: "FAQs" },
   { href: "/contact", label: "Contact" },
 ];
