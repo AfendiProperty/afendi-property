@@ -35,7 +35,7 @@ export function Header() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center space-x-5 text-sm font-semibold text-brand-navy">
+        <nav className="hidden md:flex flex-1 justify-center items-center space-x-5 text-sm font-semibold text-brand-navy">
   {nav.map((i) => (
     <Link
       key={i.href}
